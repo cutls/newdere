@@ -1,5 +1,6 @@
 import canvas from 'canvas'
-import fs from 'fs'
+import moment from 'moment'
+import upload from './upload'
 import { IChara } from '../types'
 const { createCanvas, registerFont, loadImage } = canvas
 
@@ -85,8 +86,8 @@ export default async function main(createData: any) {
         ctx.stroke()
         base = base + 320
     }
-
-    fs.writeFileSync('index.html', '<img src="' + image.toDataURL() + '" style="border: 1px black solid" />')
+    await upload(`${moment().format(`YYYY-MM-DD`)}.png`, image.toBuffer())
+   
 }
 function getColor(type: 'Cu' | 'Co' | 'Pa') {
     if (type === 'Co') return '#2b6acf'

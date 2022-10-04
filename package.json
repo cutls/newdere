@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "dependencies": {
+    "@google-cloud/storage": "^6.5.2",
     "abbrev": "^1.1.1",
     "agent-base": "^6.0.2",
     "ansi-regex": "^5.0.1",

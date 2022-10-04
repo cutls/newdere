@@ -5,7 +5,7 @@ import create from './create'
 
 export default async function main () {
     const { changed, idols } = await getImageIdData()
-    console.log(changed)
+    if (!changed.length) return
     for (const idolName of changed) {
         await check(idolName)
     }
