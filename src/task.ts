@@ -3,8 +3,9 @@ import check from './check'
 import sheet from './sheet'
 import create from './create'
 
-export default async function () {
+export default async function main () {
     const { changed, idols } = await getImageIdData()
+    console.log(changed, idols)
     for (const idolName of changed) {
         await check(idolName)
     }
@@ -12,3 +13,4 @@ export default async function () {
     const result = await calc(sheetData, idols)
     await create(result)
 }
+main()

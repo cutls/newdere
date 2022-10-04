@@ -33,23 +33,30 @@ export async function calc(json: any, allCharaIdData: any) {
     return newData
 }
 export async function getImageIdData() {
-    const alldataRaw = await axios.get('https://starlight.kirara.ca/api/v1/list/card_t')
-    const oldData = JSON.parse(fs.readFileSync('allCharaData.json').toString())
-    const alldata = alldataRaw.data.result
-    const changed = []
-    const idols: { [key: string]: number } = {}
-    for (const card of alldata) {
-        if (card.rarity_dep.rarity !== 7) continue
-        idols[card.name_only] = card.evolution_id
+    try {
+        const alldataRaw = await axios.get('https://starlight.kirara.ca/api/v1/list/card_t')
+        console.log(alldataRaw.data.result)
+        const oldData = JSON.parse(fs.readFileSync('allCharaData.json').toString())
+        const alldata = alldataRaw.data.result
+        const changed = []
+        const idols: { [key: string]: number } = {}
+        for (const card of alldata) {
+            if (card.rarity_dep.rarity !== 7) continue
+            idols[card.name_only] = card.evolution_id
+        }
+        for (const [key, value] of Object.entries(idols)) {
+            if (oldData[key] !== value) changed.push(key)
+        }
+        fs.writeFileSync('allCharaIdData.json', JSON.stringify(idols))
+        return {
+            changed,
+            idols
+        }
+    } catch (e: any) {
+        console.error(e)
+        throw { changed: [], idols: {}}
     }
-    for (const [key, value] of Object.entries(idols)) {
-        if (oldData[key] !== value) changed.push(key)
-    }
-    fs.writeFileSync('allCharaIdData.json', JSON.stringify(idols))
-    return {
-        changed,
-        idols
-    }
+    
 }
 
 
