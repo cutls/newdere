@@ -35,7 +35,7 @@ export async function calc(json: any, allCharaIdData: any) {
 export async function getImageIdData() {
     try {
         const alldataRaw = await axios.get('https://starlight.kirara.ca/api/v1/list/card_t')
-        const oldData = JSON.parse(fs.readFileSync('allCharaData.json').toString())
+        const oldData = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
         const alldata = alldataRaw.data.result
         const changed = []
         const idols: { [key: string]: number } = {}
