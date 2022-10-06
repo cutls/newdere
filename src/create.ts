@@ -104,14 +104,16 @@ export default async function main(createData: any, debug?: boolean) {
         ctx.stroke()
         base = base + 340
     }
+    const buffer = image.toBuffer()
     if (debug) {
-        fs.writeFileSync('image.png', image.toBuffer())
+        fs.writeFileSync('image.png', buffer)
     } else {
-        await upload(`${moment().format(`YYYY-MM-DD`)}.png`, image.toBuffer())
+        await upload(`${moment().format(`YYYY-MM-DD`)}.png`, buffer)
     }
+    return buffer
 }
-const idols = JSON.parse(fs.readFileSync('createData.json').toString())
-main(idols, true)
+//const idols = JSON.parse(fs.readFileSync('createData.json').toString())
+//main(idols, true)
 function getColor(type: 'Cu' | 'Co' | 'Pa') {
     if (type === 'Co') return '#2b6acf'
     if (type === 'Cu') return '#cf2ba1'
