@@ -41,8 +41,8 @@ export default async function main(createData: any, debug?: boolean) {
             const cts = idol.count
             if (cts[2] > 0) {
                 ctx.beginPath()
-                ctx.fillStyle = '#f5b8c0'
-                if(cts[2] >= 2) ctx.fillStyle = '#ed9da7'
+                ctx.fillStyle = '#eccfd2'
+                if(cts[2] >= 2) ctx.fillStyle = '#dc9798'
                 ctx.rect( base + 168, start - 15, 52, 50 )
                 ctx.fill()
             }
@@ -67,35 +67,37 @@ export default async function main(createData: any, debug?: boolean) {
             ctx.fillText(`日`, base + 327, start + 15)
             ctx.font = '14px NotoSans'
             ctx.fillText(`${idol.date.slice(2)}`, base + 222, start + 15)
+            // 横線
             ctx.beginPath()
-            ctx.moveTo(base, start + 35)
-            ctx.lineTo(base + 340, start + 35)
+            ctx.moveTo(base, start - 15)
+            ctx.lineTo(base + 340, start - 15)
             ctx.strokeStyle = '#e0e0e0'
             ctx.lineWidth = 1
             ctx.stroke()
             start = start + 50
         }
+
         ctx.beginPath()
-        ctx.moveTo(base + 168, 65)
+        ctx.moveTo(base + 168, 30)
         ctx.lineTo(base + 168, start - 15)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo(base + 285, 65)
+        ctx.moveTo(base + 285, 30)
         ctx.lineTo(base + 285, start - 15)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo(base + 220, 65)
+        ctx.moveTo(base + 220, 30)
         ctx.lineTo(base + 220, start - 15)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
 
         ctx.beginPath()
-        ctx.moveTo(base + 340, 75)
+        ctx.moveTo(base + 340, 30)
         ctx.lineTo(base + 340, height - 10)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
@@ -108,8 +110,8 @@ export default async function main(createData: any, debug?: boolean) {
         await upload(`${moment().format(`YYYY-MM-DD`)}.png`, image.toBuffer())
     }
 }
-//const idols = JSON.parse(fs.readFileSync('createData.json').toString())
-//main(idols, true)
+const idols = JSON.parse(fs.readFileSync('createData.json').toString())
+main(idols, true)
 function getColor(type: 'Cu' | 'Co' | 'Pa') {
     if (type === 'Co') return '#2b6acf'
     if (type === 'Cu') return '#cf2ba1'

@@ -40,7 +40,9 @@ export default async function main(idolName: string) {
             if (type === 'fes') target = 6
             if (type === 'limited') target = 5
             const a1 = sheet.getCell(i, target)
-            if(typeof a1.value === 'number') a1.value = a1.value + 1
+            if (typeof a1.value === 'number') a1.value = a1.value + 1
+            const a7 = sheet.getCell(i, 7)
+            a7.value = moment().format('YYYY/MM/DD')
             await sheet.saveUpdatedCells()
             return
         }
