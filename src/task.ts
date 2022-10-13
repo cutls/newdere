@@ -7,9 +7,11 @@ import twitter from './twitter'
 export default async function main() {
     const { changed, idols } = await getImageIdData()
     if (!changed.length) return
+    let toot = false
     for (const idolName of changed) {
-        await check(idolName)
+        toot = await check(idolName)
     }
+    if (!toot) return false
     const sheetData = await sheet()
     const result = await calc(sheetData, idols)
     const buffer = await create(result)
