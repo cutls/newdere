@@ -50,4 +50,5 @@ export default async function main(idolName: string) {
         }
         i++
     }
+    return false
 }
