@@ -36,6 +36,8 @@ export default async function main(idolName: string) {
         if (i > 200) break
         const name = sheet.getCell(i, 2).value
         if (`${name}` === `${idolName}`) {
+            const a3 = sheet.getCell(i, 3)
+            if (!a3.value || a3.value === '') return false
             let target = 4
             if (type === 'fes') target = 6
             if (type === 'limited') target = 5
@@ -44,7 +46,7 @@ export default async function main(idolName: string) {
             const a7 = sheet.getCell(i, 7)
             a7.value = moment().format('YYYY/MM/DD')
             await sheet.saveUpdatedCells()
-            return
+            return true
         }
         i++
     }
