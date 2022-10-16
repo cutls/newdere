@@ -46,7 +46,7 @@ export default async function main(idolName: string) {
             const a7 = sheet.getCell(i, 7)
             const a9 = sheet.getCell(i, 9)
             a9.value = moment().format('YYYY/MM/DD')
-            a7.formula = '=J' + (i +1)
+            a7.formula = '=DATEVALUE(J' + (i +1) + ')'
             await sheet.saveUpdatedCells()
             return true
         }
