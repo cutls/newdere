@@ -44,7 +44,9 @@ export default async function main(idolName: string) {
             const a1 = sheet.getCell(i, target)
             if (typeof a1.value === 'number') a1.value = a1.value + 1
             const a7 = sheet.getCell(i, 7)
-            a7.value = moment().format('YYYY/MM/DD')
+            const a9 = sheet.getCell(i, 9)
+            a9.value = moment().format('YYYY/MM/DD')
+            a7.formula = '=J' + (i +1)
             await sheet.saveUpdatedCells()
             return true
         }
