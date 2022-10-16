@@ -29,7 +29,7 @@ export default async function main(idolName: string) {
     await doc.loadInfo()
     const sheet = doc.sheetsByIndex[0]
     const json = []
-    await sheet.loadCells('A1:I200')
+    await sheet.loadCells('A1:J200')
     console.log(sheet.cellStats)
     let i = 0
     while (true) {
