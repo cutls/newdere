@@ -5,7 +5,7 @@ import create from './create'
 
 export default async function () {
     const idols: any[] = []
-    const sheetData = await sheet()
+    const sheetData = await sheet(true)
     const result = await calc(sheetData, idols)
     await create(result)
 }
