@@ -19,7 +19,14 @@ async function checkNew() {
     }
     return 'normal'
 }
-export default async function main(idolName: string) {
+type IType = 'limited' | 'fes' | 'normal'
+interface ICheck {
+    posted: boolean
+    counts?: [number, number, number]
+    days?: number
+    type?: IType
+}
+export default async function main(idolName: string): Promise<ICheck> {
     const type = await checkNew()
     const doc = new GoogleSpreadsheet(sheetId)
     doc.useServiceAccountAuth({
@@ -37,7 +44,13 @@ export default async function main(idolName: string) {
         const name = sheet.getCell(i, 2).value
         if (`${name}` === `${idolName}`) {
             const a3 = sheet.getCell(i, 3)
-            if (!a3.value || a3.value === '') return false
+            if (!a3.value || a3.value === '') return { posted: false }
+            // Get current data
+            const a4 = Number(sheet.getCell(i, 4).value)
+            const a5 = Number(sheet.getCell(i, 5).value)
+            const a6 = Number(sheet.getCell(i, 6).value)
+            const days = Number(sheet.getCell(i, 8).value)
+            //End
             let target = 4
             if (type === 'fes') target = 6
             if (type === 'limited') target = 5
@@ -46,11 +59,16 @@ export default async function main(idolName: string) {
             const a7 = sheet.getCell(i, 7)
             const a9 = sheet.getCell(i, 9)
             a9.value = moment().format('YYYY/MM/DD')
-            a7.formula = '=DATEVALUE(J' + (i +1) + ')'
+            a7.formula = '=DATEVALUE(J' + (i + 1) + ')'
             await sheet.saveUpdatedCells()
-            return true
+            return {
+                posted: true,
+                counts: [a4, a5, a6],
+                days,
+                type
+            }
         }
         i++
     }
-    return false
+    return { posted: false }
 }
