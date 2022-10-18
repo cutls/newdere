@@ -107,13 +107,13 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
         ctx.stroke()
         base = base + 340
     }
-    const buffer = image.toBuffer()
+    const buffer = image.toBuffer('image/jpeg')
     if (debug) {
         fs.writeFileSync('image.png', buffer)
     } else {
-        await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png`, buffer)
+        await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.jpg`, buffer)
     }
-    return {buffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png`}
+    return {buffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.jpg`}
 }
 //const idols = JSON.parse(fs.readFileSync('createData.json').toString())
 //main(idols, true)
