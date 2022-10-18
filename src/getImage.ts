@@ -6,12 +6,13 @@ import create from './create'
 
 export default async function main() {
   try {
+    const cv = false
     const idols = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
-    const sheetData = await sheet()
+    const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
-    const buffer = await create(result, true)
+    const buffer = await create(result, true, !cv)
     const status = `更新情報test`
-    await twitter(status, buffer)
+    //await twitter(status, buffer)
   } catch (e) {
     console.error(e)
   }

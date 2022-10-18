@@ -3,10 +3,12 @@ import moment from 'moment'
 import upload from './upload'
 import { IChara } from '../types'
 import fs from 'fs'
+import dotenv from 'dotenv'
+dotenv.config()
 const { createCanvas, registerFont, loadImage } = canvas
 
-export default async function main(createData: any, debug?: boolean) {
-    const useList = ['7', '6', '5', '4', '3', '2']
+export default async function main(createData: any, debug?: boolean, noCv?: boolean) {
+    const useList = noCv ? ['4', '3', '2', '1'] : ['7', '6', '5', '4', '3', '2']
     let height = 0
     for (const chances of useList) {
         const idols = createData[chances]
@@ -28,8 +30,8 @@ export default async function main(createData: any, debug?: boolean) {
         ctx.fillText(`SSR ${chances}種`, base + 70, 50)
         ctx.font = '14px NotoSans'
         ctx.fillText(`内訳`, base + 175, 50)
-        ctx.fillText(`経過日数`, base + 222, 50)
-        ctx.fillText(`更新日`, base + 290, 50)
+        ctx.fillText(`更新日`, base + 222, 50)
+        ctx.fillText(`経過日数`, base + 290, 50)
         let start = 75
         for (const idol of idols) {
             if (idol.days >= 300) {
@@ -49,6 +51,7 @@ export default async function main(createData: any, debug?: boolean) {
             const image = await loadImage(idol.image)
             ctx.drawImage(image, base + 10, start - 10, 40, 40)
             ctx.font = '16px NotoSans'
+            if (idol.name.length > 7)  ctx.font = '11px NotoSans'
             ctx.fillStyle = getColor(idol.type)
             ctx.fillText(idol.name, base + 55, start + 15)
             ctx.font = '10px NotoSans'
@@ -108,9 +111,9 @@ export default async function main(createData: any, debug?: boolean) {
     if (debug) {
         fs.writeFileSync('image.png', buffer)
     } else {
-        await upload(`${moment().format(`YYYY-MM-DD`)}.png`, buffer)
+        await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png`, buffer)
     }
-    return buffer
+    return {buffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png`}
 }
 //const idols = JSON.parse(fs.readFileSync('createData.json').toString())
 //main(idols, true)

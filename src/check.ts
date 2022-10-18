@@ -25,6 +25,7 @@ interface ICheck {
     counts?: [number, number, number]
     days?: number
     type?: IType
+    hasCv: boolean
 }
 export default async function main(idolName: string): Promise<ICheck> {
     const type = await checkNew()
@@ -39,12 +40,13 @@ export default async function main(idolName: string): Promise<ICheck> {
     await sheet.loadCells('A1:J200')
     console.log(sheet.cellStats)
     let i = 0
+    let hasCv = false
     while (true) {
         if (i > 200) break
         const name = sheet.getCell(i, 2).value
         if (`${name}` === `${idolName}`) {
             const a3 = sheet.getCell(i, 3)
-            if (!a3.value || a3.value === '') return { posted: false }
+            if (a3.value && a3.value !== '') hasCv = true
             // Get current data
             const a4 = Number(sheet.getCell(i, 4).value)
             const a5 = Number(sheet.getCell(i, 5).value)
@@ -65,10 +67,11 @@ export default async function main(idolName: string): Promise<ICheck> {
                 posted: true,
                 counts: [a4, a5, a6],
                 days,
-                type
+                type,
+                hasCv
             }
         }
         i++
     }
-    return { posted: false }
+    return { posted: false, hasCv: false }
 }

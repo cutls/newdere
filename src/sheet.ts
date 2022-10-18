@@ -6,7 +6,7 @@ const sheetId = process.env.SHEET_ID || ''
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || ''
 const privateKey = process.env.GOOGLE_PRIVATE_KEY || ''
 
-export default async function () {
+export default async function (hasCv: boolean) {
     const doc = new GoogleSpreadsheet(sheetId)
     doc.useServiceAccountAuth({
         client_email: clientEmail,
@@ -18,7 +18,7 @@ export default async function () {
     const data = await sheet.getRows()
     for (const idol of data) {
         const [id, type, name, cv, c1, c2, c3, last, days] = idol._rawData
-        if (!cv) continue
+        if ((hasCv && !cv) || (!hasCv && cv)) continue
         const add = {
             idolId: id,
             type,
