@@ -49,7 +49,6 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
                 ctx.fill()
             }
             if (!idol.image) console.log(`No image of ${idol.name}`)
-            console.log(idol.name, idol.image)
             const image = await loadImage(idol.image)
             ctx.drawImage(image, base + 10, start - 10, 40, 40)
             ctx.font = '16px NotoSans'

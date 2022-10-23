@@ -12,7 +12,7 @@ export default async function main() {
     const isNoir = moment().day() <= 20 && moment().day() >= 10
     if (!changed.length) return
     let toot = true
-    let typeJa = ''
+    let typeJa = '恒常'
     let cv = false
     const notation = []
     for (const idolName of changed) {
@@ -21,7 +21,11 @@ export default async function main() {
         if (type === 'limited') typeJa = '限定'
         if (type === 'fes' && isNoir) typeJa = 'ノワール'
         if (type === 'fes' && !isNoir) typeJa = 'ブラン'
-        if (counts) notation.push(`[${typeJa}] ${idolName} ${days}日経過(恒常${counts[0]}, 限定${counts[1]}, フェス${counts[2]})`)
+        let [n, l, f] = counts || [0, 0, 0]
+        if (type === 'fes') f = f + 1
+        if (type === 'limited') l = l + 1
+        if (type === 'normal') n = n + 1
+        if (counts) notation.push(`[${typeJa}] ${idolName} ${days}日経過(恒常${n}, 限定${l}, フェス${f})`)
     }
     if (!toot) return false
     const sheetData = await sheet(cv)
