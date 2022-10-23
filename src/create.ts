@@ -108,7 +108,7 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
         ctx.stroke()
         base = base + 340
     }
-    const buffer = image.toBuffer('image/jpeg')
+    const buffer = image.toBuffer('image/jpeg', { quality: 1 })
     if (debug) {
         fs.writeFileSync('image.png', buffer)
     } else {
