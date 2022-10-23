@@ -115,7 +115,7 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
     } else {
         await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png`, pngBuffer)
     }
-    return { buffer: jpgBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.pdf` }
+    return { buffer: jpgBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png` }
 }
 //const idols = JSON.parse(fs.readFileSync('createData.json').toString())
 //main(idols, true)
