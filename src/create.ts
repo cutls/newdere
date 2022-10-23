@@ -109,11 +109,11 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
         base = base + 340
     }
     const jpgBuffer = image.toBuffer('image/jpeg', { quality: 1 })
-    const pdfBuffer = image.toBuffer('application/pdf')
+    const pngBuffer = image.toBuffer('image/png')
     if (debug) {
-        fs.writeFileSync('image.pdf', pdfBuffer)
+        fs.writeFileSync('image.png', pngBuffer)
     } else {
-        await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.pdf`, pdfBuffer)
+        await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png`, pngBuffer)
     }
     return { buffer: jpgBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.pdf` }
 }
