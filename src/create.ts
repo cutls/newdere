@@ -37,22 +37,22 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
             if (idol.days >= 300) {
                 ctx.beginPath()
                 ctx.fillStyle = '#d8e5f0'
-                ctx.rect( base + 220, start - 15, 120, 50 )
+                ctx.rect(base + 220, start - 15, 120, 50)
                 ctx.fill()
             }
             const cts = idol.count
             if (cts[2] > 0) {
                 ctx.beginPath()
                 ctx.fillStyle = '#eccfd2'
-                if(cts[2] >= 2) ctx.fillStyle = '#dc9798'
-                ctx.rect( base + 168, start - 15, 52, 50 )
+                if (cts[2] >= 2) ctx.fillStyle = '#dc9798'
+                ctx.rect(base + 168, start - 15, 52, 50)
                 ctx.fill()
             }
             if (!idol.image) console.log(`No image of ${idol.name}`)
             const image = await loadImage(idol.image)
             ctx.drawImage(image, base + 10, start - 10, 40, 40)
             ctx.font = '16px NotoSans'
-            if (idol.name.length > 7)  ctx.font = '11px NotoSans'
+            if (idol.name.length > 7) ctx.font = '11px NotoSans'
             ctx.fillStyle = getColor(idol.type)
             ctx.fillText(idol.name, base + 55, start + 15)
             ctx.font = '10px NotoSans'
@@ -108,13 +108,14 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
         ctx.stroke()
         base = base + 340
     }
-    const buffer = image.toBuffer('image/jpeg', { quality: 1 })
+    const jpgBuffer = image.toBuffer('image/jpeg', { quality: 1 })
+    const pdfBuffer = image.toBuffer('application/pdf')
     if (debug) {
-        fs.writeFileSync('image.png', buffer)
+        fs.writeFileSync('image.pdf', pdfBuffer)
     } else {
-        await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.jpg`, buffer)
+        await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.pdf`, pdfBuffer)
     }
-    return {buffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.jpg`}
+    return { buffer: jpgBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.pdf` }
 }
 //const idols = JSON.parse(fs.readFileSync('createData.json').toString())
 //main(idols, true)
