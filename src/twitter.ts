@@ -9,10 +9,15 @@ const twit = new twitter({
     access_token_key: process.env.TW_ACCESS_TOKEN || '',
     access_token_secret: process.env.TW_ACCESS_TOKEN_SECRET || '',
 })
-export default async function main(text: string, media: Buffer) {
+export default async function main(text: string, media: Buffer[]) {
     try {
-        const mediaId = await twit.post('media/upload', { media })
-        await twit.post('/statuses/update.json', { status: text, media_ids: mediaId.media_id_string })
+        const mediaIds = []
+        for (const medium of media) {
+            const mediaId = await twit.post('media/upload', { media: media })
+            mediaIds.push(mediaId.media_id_string)
+        }
+        
+        await twit.post('/statuses/update.json', { status: text, media_ids: mediaIds.join(',') })
     } catch (e) {
         console.error(e)
     }

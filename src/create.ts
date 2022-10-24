@@ -7,12 +7,13 @@ import dotenv from 'dotenv'
 dotenv.config()
 const { createCanvas, registerFont, loadImage } = canvas
 const scale = 2
+type ICreateData = { [key: number]: IChara[] }
 
-export default async function main(createData: any, debug?: boolean, noCv?: boolean) {
-    const useList = noCv ? ['4', '3', '2', '1'] : ['7', '6', '5', '4', '3', '2']
+export default async function main(createData: ICreateData, debug?: boolean, noCv?: boolean) {
+    const useList = noCv ? ['3+', '2Cu', '2Co', '2Pa', '1Cu', '1Co', '1Pa'] : ['7', '6', '5', '4', '3', '2']
     let height = 0
     for (const chances of useList) {
-        const idols = createData[chances]
+        const idols = retIdols(createData, chances) || []
         const thisHeight = idols.length * 50 + 75
         if (thisHeight > height) height = thisHeight
     }
@@ -24,15 +25,16 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
     ctx.fillStyle = 'white'
     ctx.fillRect(0, 0, image.width * scale, image.height * scale)
     let base = 10
-    for (const chances of useList) {
-        const idols: IChara[] = createData[chances]
+    for (const chanceStr of useList) {
+        const idols: IChara[] = retIdols(createData, chanceStr) || []
         ctx.font = font(18)
         ctx.fillStyle = 'black'
-        ctx.fillText(`SSR ${chances}種`, (base + 70) * scale, 50 * scale)
+        ctx.fillText(`SSR ${getHeaderTitle(chanceStr)}`, (base + 50) * scale, 50 * scale)
         ctx.font = font(14)
         ctx.fillText(`内訳`, (base + 175) * scale, 50 * scale)
         ctx.fillText(`更新日`, (base + 222) * scale, 50 * scale)
-        ctx.fillText(`経過日数`, (base + 290) * scale, 50 * scale)
+        ctx.fillText(`経過`, (base + 295) * scale, 35 * scale)
+        ctx.fillText(`日数`, (base + 295) * scale, 50 * scale)
         let start = 75
         for (const idol of idols) {
             if (idol.days >= 300) {
@@ -58,7 +60,7 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
             ctx.fillText(idol.name, (base + 55) * scale, (start + 15) * scale)
             ctx.font = font(10)
             ctx.fillStyle = 'black'
-            ctx.fillText(`恒常:${cts[0]}`,( base + 175) * scale, start * scale)
+            ctx.fillText(`恒常:${cts[0]}`, (base + 175) * scale, start * scale)
             ctx.fillText(`限定:${cts[1]}`, (base + 175) * scale, (start + 15) * scale)
             ctx.fillText(`フェス:${cts[2]}`, (base + 175) * scale, (start + 30) * scale)
             ctx.font = font(18)
@@ -117,7 +119,7 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
     } else {
         await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png`, pngBuffer)
     }
-    return { buffer: pngBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png` }
+    return { buffer: [pngBuffer], url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png` }
 }
 //const idols = JSON.parse(fs.readFileSync('createData.json').toString())
 //main(idols, true)
@@ -129,4 +131,24 @@ function getColor(type: 'Cu' | 'Co' | 'Pa') {
 }
 function font(size: number) {
     return `${size * scale}px NotoSans`
+}
+function retIdols(createData: ICreateData, chances: string) {
+    if (parseInt(chances, 10).toString() === chances) return createData[parseInt(chances, 10)]
+    if (chances === '3+') {
+        return createData['4'].concat(createData['3'])
+    } else if (chances.match(/([12])(Cu|Co|Pa)/)) {
+        const m = chances.match(/([12])(Cu|Co|Pa)/)
+        if (!m) return []
+        return createData[parseInt(m[1], 10)].filter((idol) => idol.type === m[2])
+    }
+}
+function getHeaderTitle(chanceStr: string) {
+    if (parseInt(chanceStr, 10).toString() === chanceStr) return `${chanceStr}種`
+    if (chanceStr === '3+') {
+        return `3種以上`
+    } else if (chanceStr.match(/([12])(Cu|Co|Pa)/)) {
+        const m = chanceStr.match(/([12])(Cu|Co|Pa)/)
+        if (!m) return  `${chanceStr}種`
+        return `${m[1]}種(${m[2]})`
+    }
 }
