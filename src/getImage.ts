@@ -10,9 +10,9 @@ export default async function main() {
     const idols = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
-    const buffer = await create(result, true, !cv)
-    const status = `更新情報test`
-    //await twitter(status, buffer)
+    const {buffer, url} = await create(result, true, !cv)
+    const status = `更新情報test ${url}`
+    await twitter(status, buffer)
   } catch (e) {
     console.error(e)
   }

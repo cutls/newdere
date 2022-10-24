@@ -6,6 +6,7 @@ import fs from 'fs'
 import dotenv from 'dotenv'
 dotenv.config()
 const { createCanvas, registerFont, loadImage } = canvas
+const scale = 2
 
 export default async function main(createData: any, debug?: boolean, noCv?: boolean) {
     const useList = noCv ? ['4', '3', '2', '1'] : ['7', '6', '5', '4', '3', '2']
@@ -16,28 +17,28 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
         if (thisHeight > height) height = thisHeight
     }
     registerFont('./noto.otf', { family: 'NotoSans' })
-    const image = createCanvas(340 * useList.length + 100, height)
+    const image = createCanvas((340 * useList.length + 100) * scale, height * scale)
 
     const ctx = image.getContext('2d')
     ctx.beginPath()
     ctx.fillStyle = 'white'
-    ctx.fillRect(0, 0, image.width, image.height)
+    ctx.fillRect(0, 0, image.width * scale, image.height * scale)
     let base = 10
     for (const chances of useList) {
         const idols: IChara[] = createData[chances]
-        ctx.font = '18px NotoSans'
+        ctx.font = font(18)
         ctx.fillStyle = 'black'
-        ctx.fillText(`SSR ${chances}種`, base + 70, 50)
-        ctx.font = '14px NotoSans'
-        ctx.fillText(`内訳`, base + 175, 50)
-        ctx.fillText(`更新日`, base + 222, 50)
-        ctx.fillText(`経過日数`, base + 290, 50)
+        ctx.fillText(`SSR ${chances}種`, (base + 70) * scale, 50 * scale)
+        ctx.font = font(14)
+        ctx.fillText(`内訳`, (base + 175) * scale, 50 * scale)
+        ctx.fillText(`更新日`, (base + 222) * scale, 50 * scale)
+        ctx.fillText(`経過日数`, (base + 290) * scale, 50 * scale)
         let start = 75
         for (const idol of idols) {
             if (idol.days >= 300) {
                 ctx.beginPath()
                 ctx.fillStyle = '#d8e5f0'
-                ctx.rect(base + 220, start - 15, 120, 50)
+                ctx.rect((base + 220) * scale, (start - 15) * scale, 120 * scale, 50 * scale)
                 ctx.fill()
             }
             const cts = idol.count
@@ -45,36 +46,36 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
                 ctx.beginPath()
                 ctx.fillStyle = '#eccfd2'
                 if (cts[2] >= 2) ctx.fillStyle = '#dc9798'
-                ctx.rect(base + 168, start - 15, 52, 50)
+                ctx.rect((base + 168) * scale, (start - 15) * scale, 52 * scale, 50 * scale)
                 ctx.fill()
             }
             if (!idol.image) console.log(`No image of ${idol.name}`)
             const image = await loadImage(idol.image)
-            ctx.drawImage(image, base + 10, start - 10, 40, 40)
-            ctx.font = '16px NotoSans'
-            if (idol.name.length > 7) ctx.font = '11px NotoSans'
+            ctx.drawImage(image, (base + 10) * scale, (start - 10) * scale, 40 * scale, 40 * scale)
+            ctx.font = font(16)
+            if (idol.name.length > 7) ctx.font = font(11)
             ctx.fillStyle = getColor(idol.type)
-            ctx.fillText(idol.name, base + 55, start + 15)
-            ctx.font = '10px NotoSans'
+            ctx.fillText(idol.name, (base + 55) * scale, (start + 15) * scale)
+            ctx.font = font(10)
             ctx.fillStyle = 'black'
-            ctx.fillText(`恒常:${cts[0]}`, base + 175, start)
-            ctx.fillText(`限定:${cts[1]}`, base + 175, start + 15)
-            ctx.fillText(`フェス:${cts[2]}`, base + 175, start + 30)
-            ctx.font = '18px NotoSans'
+            ctx.fillText(`恒常:${cts[0]}`,( base + 175) * scale, start * scale)
+            ctx.fillText(`限定:${cts[1]}`, (base + 175) * scale, (start + 15) * scale)
+            ctx.fillText(`フェス:${cts[2]}`, (base + 175) * scale, (start + 30) * scale)
+            ctx.font = font(18)
             let add = 0
             const days = idol.days
             if (days < 1000) add = add + 10
             if (days < 100) add = add + 10
             if (days < 10) add = add + 10
-            ctx.fillText(`${days}`, base + 285 + add, start + 15)
-            ctx.font = '10px NotoSans'
-            ctx.fillText(`日`, base + 327, start + 15)
-            ctx.font = '14px NotoSans'
-            ctx.fillText(`${idol.date.slice(2)}`, base + 222, start + 15)
+            ctx.fillText(`${days}`, (base + 285 + add) * scale, (start + 15) * scale)
+            ctx.font = font(10)
+            ctx.fillText(`日`, (base + 327) * scale, (start + 15) * scale)
+            ctx.font = font(14)
+            ctx.fillText(`${idol.date.slice(2)}`, (base + 222) * scale, (start + 15) * scale)
             // 横線
             ctx.beginPath()
-            ctx.moveTo(base, start - 15)
-            ctx.lineTo(base + 340, start - 15)
+            ctx.moveTo(base * scale, (start - 15) * scale)
+            ctx.lineTo((base + 340) * scale, (start - 15) * scale)
             ctx.strokeStyle = '#e0e0e0'
             ctx.lineWidth = 1
             ctx.stroke()
@@ -82,40 +83,41 @@ export default async function main(createData: any, debug?: boolean, noCv?: bool
         }
 
         ctx.beginPath()
-        ctx.moveTo(base + 168, 30)
-        ctx.lineTo(base + 168, start - 15)
+        ctx.moveTo((base + 168) * scale, 30 * scale)
+        ctx.lineTo((base + 168) * scale, (start - 15) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo(base + 285, 30)
-        ctx.lineTo(base + 285, start - 15)
+        ctx.moveTo((base + 285) * scale, 30 * scale)
+        ctx.lineTo((base + 285) * scale, (start - 15) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo(base + 220, 30)
-        ctx.lineTo(base + 220, start - 15)
+        ctx.moveTo((base + 220) * scale, 30 * scale)
+        ctx.lineTo((base + 220) * scale, (start - 15) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
 
         ctx.beginPath()
-        ctx.moveTo(base + 340, 30)
-        ctx.lineTo(base + 340, height - 10)
+        ctx.moveTo((base + 340) * scale, 30 * scale)
+        ctx.lineTo((base + 340) * scale, (height - 10) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
         base = base + 340
     }
-    const jpgBuffer = image.toBuffer('image/jpeg', { quality: 1 })
+    //const jpgBuffer = image.toBuffer('image/jpeg', { quality: 1 })
     const pngBuffer = image.toBuffer('image/png')
     if (debug) {
         fs.writeFileSync('image.png', pngBuffer)
+        //fs.writeFileSync('image.jpg', jpgBuffer)
     } else {
         await upload(`${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png`, pngBuffer)
     }
-    return { buffer: jpgBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png` }
+    return { buffer: pngBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}${noCv ? '-nocv' : '-cv'}.png` }
 }
 //const idols = JSON.parse(fs.readFileSync('createData.json').toString())
 //main(idols, true)
@@ -124,4 +126,7 @@ function getColor(type: 'Cu' | 'Co' | 'Pa') {
     if (type === 'Cu') return '#cf2ba1'
     if (type === 'Pa') return '#c99a2a'
     return '#000'
+}
+function font(size: number) {
+    return `${size * scale}px NotoSans`
 }

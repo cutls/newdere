@@ -1,11 +1,18 @@
 import { getImageIdData, calc } from './calc'
-import check from './check'
+import fs from 'fs'
 import sheet from './sheet'
 import create from './create'
 
-export default async function () {
-    const idols: any[] = []
-    const sheetData = await sheet(true)
-    const result = await calc(sheetData, idols)
-    await create(result)
+const main = async function () {
+    try {
+        const idols = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
+        const sheetData = await sheet(true)
+        const result = await calc(sheetData, idols)
+        await create(result, true)
+    } catch (e) {
+        console.error(e)
+    }
+   
 }
+export default main
+main()
