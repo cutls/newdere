@@ -1,5 +1,7 @@
 # newdere
 
+[@nita_minami](https://twitter.com/nita_minami)
+
 ![2022-10-30-cv](/res/2022-10-30-cv.png)  
 ↑2022年10月30日現在↑
 
