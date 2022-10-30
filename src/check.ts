@@ -15,8 +15,8 @@ async function checkNew() {
             if (moment(new Date(item.created_at)).diff(moment()) < 60 * 60 * 1000 * -1) break
             const content = item.text
             if (content?.match('＜期間限定アイドル')) return 'limited'
-            if (content?.match('＜ブラン限定アイドル')) return 'fes'
-            if (content?.match('＜ノワール限定アイドル')) return 'fes'
+            if (content?.match('＜ブラン限定アイドル')) return 'blane'
+            if (content?.match('＜ノワール限定アイドル')) return 'noir'
         }
         return 'normal'
     } catch (e) {
@@ -29,12 +29,12 @@ async function checkNewFromRSS() {
         if (moment(item.pubDate).diff(moment()) < 60 * 60 * 1000 * -1) break
         const content = item.contentSnippet
         if (content?.match('＜期間限定アイドル')) return 'limited'
-        if (content?.match('＜ブラン限定アイドル')) return 'fes'
-        if (content?.match('＜ノワール限定アイドル')) return 'fes'
+        if (content?.match('＜ブラン限定アイドル')) return 'blane'
+        if (content?.match('＜ノワール限定アイドル')) return 'noir'
     }
     return 'normal'
 }
-type IType = 'limited' | 'fes' | 'normal'
+type IType = 'limited' | 'noir' | 'blane' | 'normal'
 interface ICheck {
     posted: boolean
     counts?: [number, number, number]
@@ -69,7 +69,7 @@ export default async function main(idolName: string): Promise<ICheck> {
             const days = Number(sheet.getCell(i, 8).value)
             //End
             let target = 4
-            if (type === 'fes') target = 6
+            if (type === 'blane' || type === 'noir') target = 6
             if (type === 'limited') target = 5
             const a1 = sheet.getCell(i, target)
             if (typeof a1.value === 'number') a1.value = a1.value + 1
