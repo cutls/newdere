@@ -49,7 +49,7 @@ yarn
 
 必須項目は左から順に、ID, (Cu|Co|Pa), 名前, CV, 恒常数, 限定数, フェス数, 最終更新日です。[サンプルCSV 2022/10/30現在](https://github.com/cutls/newdere/blob/main/res/samplesheet-20221030.csv)
 
-CVは今の所ボイス実装済みかどうかの判定だけにしか使いませんので、実装済みのアイドルだけ`1`とでも入力しておけば十分です。
+CVは今の所ボイス実装済みかどうかの判定だけにしか使いませんので、実装済みのアイドルだけ`1`とでも入力しておけば十分です。IDは連番のように見えて実は連番ではありません。一部抜けがあります。
 
 経過日数は、H3に`=IF(H2, DATEDIF(H2,TODAY(),"D"),"")`と入れて出しています。J列は空列にしておくことをおすすめします。(依存ライブラリの制限 [google-spreadsheet#367](https://github.com/theoephraim/node-google-spreadsheet/issues/367))
 
