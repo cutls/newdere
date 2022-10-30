@@ -85,7 +85,7 @@ task.jsは以下の作業を行います。
 
 1. starlight.kirara.caのAPIを用いて、新しいカードがあるかどうかを取得します。(ない場合はここで終了)
 1. APIの結果を整形した上で`allCharaIdData.json`に保存します。
-1. 更新されたカードの種類(恒常, 限定, フェス)を確認するために、[非公式RSS](https://imastodon.net/@imascg_stage_bot.rss)を用いて、公式Twitterの情報を取得します。
+1. 更新されたカードの種類(恒常, 限定, フェス)を確認するために、公式Twitterの情報を取得します。
 1. スプレッドシートに書き込みます。
 1. (これより先はgetImage.tsでも行われます)スプレッドシートを読み込みます。
 1. `allCharaIdData.json`とスプレッドシートの情報から、画像を作成します。アイドルのカード画像はstarlight.kirara.caのAPIを用いて取得しています。

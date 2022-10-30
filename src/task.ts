@@ -2,7 +2,7 @@ import { getImageIdData, calc } from './calc'
 import check from './check'
 import sheet from './sheet'
 import create from './create'
-import twitter from './twitter'
+import * as twitter from './twitter'
 import moment from 'moment'
 const br = `
 `
@@ -32,6 +32,6 @@ export default async function main() {
     const result = await calc(sheetData, idols)
     const { buffer, url } = await create(result, false, !cv)
     const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url}`
-    await twitter(status, buffer)
+    await twitter.tweet(status, buffer)
 }
 main()

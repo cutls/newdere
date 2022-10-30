@@ -1,5 +1,6 @@
 import moment from 'moment'
 import RssParser from 'rss-parser'
+import { getTl, tweet } from './twitter'
 import { GoogleSpreadsheet } from 'google-spreadsheet'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -7,8 +8,22 @@ const sheetId = process.env.SHEET_ID || ''
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || ''
 const privateKey = process.env.GOOGLE_PRIVATE_KEY || ''
 const parser = new RssParser()
-
 async function checkNew() {
+    try {
+        const items = await getTl() as any[]
+        for (const item of items) {
+            if (moment(new Date(item.created_at)).diff(moment()) < 60 * 60 * 1000 * -1) break
+            const content = item.text
+            if (content?.match('＜期間限定アイドル')) return 'limited'
+            if (content?.match('＜ブラン限定アイドル')) return 'fes'
+            if (content?.match('＜ノワール限定アイドル')) return 'fes'
+        }
+        return 'normal'
+    } catch (e) {
+        console.error(e)
+    }
+}
+async function checkNewFromRSS() {
     const { items } = await parser.parseURL(`https://imastodon.net/@imascg_stage_bot.rss`)
     for (const item of items) {
         if (moment(item.pubDate).diff(moment()) < 60 * 60 * 1000 * -1) break
