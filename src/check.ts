@@ -1,39 +1,20 @@
 import moment from 'moment'
-import RssParser from 'rss-parser'
-import { getTl, tweet } from './twitter'
 import { GoogleSpreadsheet } from 'google-spreadsheet'
+import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
 import dotenv from 'dotenv'
 dotenv.config()
 const sheetId = process.env.SHEET_ID || ''
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || ''
 const privateKey = process.env.GOOGLE_PRIVATE_KEY || ''
-const parser = new RssParser()
-async function checkNew() {
-    try {
-        const items = await getTl() as any[]
-        for (const item of items) {
-            if (moment(new Date(item.created_at)).diff(moment()) < 60 * 60 * 1000 * -1) break
-            const content = item.text
-            if (content?.match('＜期間限定アイドル')) return 'limited'
-            if (content?.match('＜ブラン限定アイドル')) return 'blane'
-            if (content?.match('＜ノワール限定アイドル')) return 'noir'
-        }
-        return 'normal'
-    } catch (e) {
-        console.error(e)
-    }
-}
-async function checkNewFromRSS() {
-    const { items } = await parser.parseURL(`https://imastodon.net/@imascg_stage_bot.rss`)
-    for (const item of items) {
-        if (moment(item.pubDate).diff(moment()) < 60 * 60 * 1000 * -1) break
-        const content = item.contentSnippet
-        if (content?.match('＜期間限定アイドル')) return 'limited'
-        if (content?.match('＜ブラン限定アイドル')) return 'blane'
-        if (content?.match('＜ノワール限定アイドル')) return 'noir'
-    }
+
+function checkNew(item: TweetV1) {
+    const content = item.text
+    if (content?.match('＜期間限定アイドル')) return 'limited'
+    if (content?.match('＜ブラン限定アイドル')) return 'blane'
+    if (content?.match('＜ノワール限定アイドル')) return 'noir'
     return 'normal'
 }
+
 type IType = 'limited' | 'noir' | 'blane' | 'normal'
 interface ICheck {
     posted: boolean
@@ -42,8 +23,8 @@ interface ICheck {
     type?: IType
     hasCv: boolean
 }
-export default async function main(idolName: string): Promise<ICheck> {
-    const type = await checkNew()
+export default async function main(idolName: string, targetTweet: TweetV1): Promise<ICheck> {
+    const type = checkNew(targetTweet)
     const doc = new GoogleSpreadsheet(sheetId)
     doc.useServiceAccountAuth({
         client_email: clientEmail,
