@@ -23,7 +23,7 @@ export default async function main() {
         if (content?.match('＜ノワール限定アイドル')) return true
         return false
     })
-    if (!targetTweet) return false
+    if (!targetTweet) return conaole.log("no tweet")
     const { id_str } = targetTweet
     const tweetUrl = `https://twitter.com/imascg_stage/status/${id_str}`
     for (const idolName of changed) {
