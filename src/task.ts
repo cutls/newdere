@@ -16,13 +16,6 @@ export default async function main() {
     let cv = false
     const notation = []
     const timeline = await getTl()
-    const targetTweet = timeline.find((item) => {
-        const content = item.text
-        if (content?.match('＜期間限定アイドル')) return true
-        if (content?.match('＜ブラン限定アイドル')) return true
-        if (content?.match('＜ノワール限定アイドル')) return true
-        return false
-    })
     let targetTweet: any = {}
     let tg = false
     for (const t of timeline) {
