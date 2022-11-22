@@ -45,7 +45,7 @@ export default async function main() {
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
     const { buffer, url } = await create(result, false, !cv)
-    const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ`
+    const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
     await twitter.tweet(status, buffer)
 }
 main()
