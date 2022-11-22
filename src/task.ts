@@ -23,6 +23,16 @@ export default async function main() {
         if (content?.match('＜ノワール限定アイドル')) return true
         return false
     })
+    let targetTweet: any = {}
+    let tg = false
+    for (const t of timeline) {
+        targetTweet = t
+        const content = t.text
+        if (content?.match('＜期間限定アイドル')) tg = true
+        if (content?.match('＜ブラン限定アイドル')) tg = true
+        if (content?.match('＜ノワール限定アイドル')) tg = true
+        if (tg) break
+    }
     if (!targetTweet) return console.log("no tweet")
     const { id_str } = targetTweet
     const tweetUrl = `https://twitter.com/imascg_stage/status/${id_str}`
