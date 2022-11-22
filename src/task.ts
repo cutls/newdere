@@ -5,6 +5,7 @@ import create from './create'
 import * as twitter from './twitter'
 import moment from 'moment'
 import { getTl } from './twitter'
+import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
 const br = `
 `
 
@@ -16,17 +17,18 @@ export default async function main() {
     let cv = false
     const notation = []
     const timeline = await getTl()
-    let targetTweet: any = {}
-    let tg = false
+    let targetTweet: TweetV1 | null = null
     for (const t of timeline) {
+        let tg = false
         targetTweet = t
         const content = t.text
         if (content?.match('＜期間限定アイドル')) tg = true
         if (content?.match('＜ブラン限定アイドル')) tg = true
         if (content?.match('＜ノワール限定アイドル')) tg = true
+        if (content?.match('新しいプラチナオーディションガシャ開催')) tg = true
         if (tg) break
     }
-    if (!targetTweet) return console.log("no tweet")
+    if (!targetTweet) return console.log('no tweet')
     const { id_str } = targetTweet
     const tweetUrl = `https://twitter.com/imascg_stage/status/${id_str}`
     for (const idolName of changed) {
@@ -45,7 +47,7 @@ export default async function main() {
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
     const { buffer, url } = await create(result, false, !cv)
-    const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ`
+    const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
     await twitter.tweet(status, buffer)
 }
 main()
