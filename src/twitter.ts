@@ -24,7 +24,7 @@ export async function tweet(text: string, media: Buffer[]) {
 }
 export async function getTl() {
     try {
-        const param: TweetV1UserTimelineParams = { screen_name: 'imascg_stage', count: 40 }
+        const param: TweetV1UserTimelineParams = { screen_name: 'imascg_stage', count: 20 }
         const get = await twit.get('/statuses/user_timeline.json', param)
         return get as TweetV1[]
     } catch (e) {
