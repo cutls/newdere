@@ -8,8 +8,9 @@ dotenv.config()
 const { createCanvas, registerFont, loadImage } = canvas
 const scale = 2
 const skillType = 'limited'
-export default async function main(createData: ISkill[], debug?: boolean) {
-    //const commonImage = await loadImage(`https://hidamarirhodonite.kirara.ca/icon_card/100708.png`)
+export default async function main(createData: ISkill[], debug?: boolean, changed?: string[]) {
+    const masterData = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
+    const commonImage = await loadImage(`https://hidamarirhodonite.kirara.ca/icon_card/100708.png`)
     let height = 0
     const skillIntList = []
     for (const skill of createData) {
@@ -74,6 +75,16 @@ export default async function main(createData: ISkill[], debug?: boolean) {
                 let imgY = start + 3
                 if (idol.property === 'Da') imgY = imgY + 60
                 if (idol.property === 'Vi') imgY = imgY + 120
+                const ids = idol.image.match(/([0-9]{1,7})\.png$/)
+                if (!ids || !ids[1]) continue
+                const id = ids[1]
+                if (changed?.includes(idol.name) && masterData[idol.name].toString() === id) {
+                    ctx.beginPath()
+                    ctx.fillStyle = '#d8e5f0'
+                    ctx.rect((imgX - 10) * scale, (imgY - 3) * scale, 60 * scale, 60 * scale)
+                    ctx.fill()
+                    ctx.fillStyle = '#000'
+                }
                 const image = await loadImage(idol.image)
                 ctx.drawImage(image, imgX * scale, imgY * scale, 40 * scale, 40 * scale)
                 if (!idol.since) continue
@@ -121,7 +132,7 @@ export default async function main(createData: ISkill[], debug?: boolean) {
     return { buffer: pngBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}-skill-${skillType}.png` }
 }
 //const idols = JSON.parse(fs.readFileSync('limited.json').toString())
-//main(idols, true)
+//main(idols, true, ['八神マキノ'])
 function font(size: number) {
     return `${size * scale}px NotoSans`
 }

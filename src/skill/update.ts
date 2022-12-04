@@ -28,7 +28,7 @@ const main = async (changed: string[], target: 'limited') => {
             const maxInd = foundIndex === 3 ? vdv.indexOf(Math.min(...vdv)) : vdv.indexOf(Math.max(...vdv))
             const property = props[maxInd]
             const willPush = {
-                type,
+                type: type,
                 property,
                 name: cardDet.name_only.replace('＋', ''),
                 interval: skill.condition,

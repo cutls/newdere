@@ -48,7 +48,6 @@ export default async function main() {
         if (type === 'normal') n = n + 1
         if (counts) notation.push(`[${typeJa}] ${idolName} ${days}日経過(恒常${n}, 限定${l}, フェス${f})`)
     }
-    if(totalType === 'limited') await updateSkillData(changed, totalType)
     if (!toot) return false
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
@@ -56,6 +55,7 @@ export default async function main() {
     const image = [buffer]
     const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
     if(totalType === 'limited') {
+        await updateSkillData(changed, totalType)
         const skillData = JSON.parse(fs.readFileSync('limited.json').toString())
         const { buffer } = await createSkilImage(skillData, false)
         image.push(buffer)
