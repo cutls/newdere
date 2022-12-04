@@ -13,7 +13,7 @@ export default async function main() {
     const result = await calc(sheetData, idols)
     const { buffer, url } = await create(result, !tweet, !cv)
     const status = `更新情報test ${url}`
-    if (tweet) await twitter.tweet(status, buffer)
+    if (tweet) await twitter.tweet(status, [buffer])
   } catch (e) {
     console.error(e)
   }
