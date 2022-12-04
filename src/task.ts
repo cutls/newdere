@@ -2,10 +2,13 @@ import { getImageIdData, calc } from './calc'
 import check from './check'
 import sheet from './sheet'
 import create from './create'
+import updateSkillData from './skill/update'
+import createSkilImage from './skill/image'
 import * as twitter from './twitter'
-import moment from 'moment'
+import fs from 'fs'
 import { getTl } from './twitter'
 import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
+import { IType } from '../types'
 const br = `
 `
 
@@ -31,8 +34,10 @@ export default async function main() {
     if (!targetTweet) return console.log('no tweet')
     const { id_str } = targetTweet
     const tweetUrl = `https://twitter.com/imascg_stage/status/${id_str}`
+    let totalType: IType = 'normal'
     for (const idolName of changed) {
         const { hasCv, counts, days, type } = await check(idolName, targetTweet)
+        if(type) totalType = type
         if (hasCv) cv = true
         if (type === 'limited') typeJa = '限定'
         if (type === 'noir') typeJa = 'ノワール'
@@ -43,11 +48,18 @@ export default async function main() {
         if (type === 'normal') n = n + 1
         if (counts) notation.push(`[${typeJa}] ${idolName} ${days}日経過(恒常${n}, 限定${l}, フェス${f})`)
     }
+    if(totalType === 'limited') await updateSkillData(changed, totalType)
     if (!toot) return false
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
     const { buffer, url } = await create(result, false, !cv)
+    const image = [buffer]
     const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
-    await twitter.tweet(status, buffer)
+    if(totalType === 'limited') {
+        const skillData = JSON.parse(fs.readFileSync('limited.json').toString())
+        const { buffer } = await createSkilImage(skillData, false)
+        image.push(buffer)
+    }
+    await twitter.tweet(status, image)
 }
 main()

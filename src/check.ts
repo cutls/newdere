@@ -2,6 +2,7 @@ import moment from 'moment'
 import { GoogleSpreadsheet } from 'google-spreadsheet'
 import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
 import dotenv from 'dotenv'
+import { IType } from '../types'
 dotenv.config()
 const sheetId = process.env.SHEET_ID || ''
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || ''
@@ -15,7 +16,6 @@ function checkNew(item: TweetV1) {
     return 'normal'
 }
 
-type IType = 'limited' | 'noir' | 'blane' | 'normal'
 interface ICheck {
     posted: boolean
     counts?: [number, number, number]

@@ -1,10 +1,7 @@
 node_modules
 dist
-data.json
-createData.json
-allCharaIdData.json
 .env
 index.html
-allCharaData.json
+*.json
 image.png
 image*.png

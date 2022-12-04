@@ -4,6 +4,7 @@ import axios from 'axios'
 async function main() {
     try {
         const alldataRaw = await axios.get('https://starlight.kirara.ca/api/v1/list/card_t')
+        fs.writeFileSync('allCharaData.json', JSON.stringify(alldataRaw))
         const alldata = alldataRaw.data.result
         const idols: { [key: string]: number } = {}
         for (const card of alldata) {
