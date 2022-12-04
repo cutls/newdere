@@ -5,7 +5,7 @@ import { ISkill } from '../../types'
 const targetSkills = ['Cute Ensemble', 'Cool Ensemble', 'Passion Ensemble', 'Mutual', 'Alternate', 'Life Sparkle']
 const props: ('Vo' | 'Vi' | 'Da')[] = ['Vo', 'Da', 'Vi']
 
-const main = async (changed: string[], target: 'limited') => {
+const main = async (changed: string[], target: 'limited' | 'blane') => {
     const idols = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
     const current: ISkill[] = JSON.parse(fs.readFileSync(`${target}.json`).toString())
     for (const changeName of changed) {

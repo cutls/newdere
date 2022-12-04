@@ -54,10 +54,10 @@ export default async function main() {
     const { buffer, url } = await create(result, false, !cv)
     const image = [buffer]
     const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
-    if(totalType === 'limited') {
+    if(totalType === 'limited' || totalType === 'blane') {
         await updateSkillData(changed, totalType)
-        const skillData = JSON.parse(fs.readFileSync('limited.json').toString())
-        const { buffer } = await createSkilImage(skillData, false)
+        const skillData = JSON.parse(fs.readFileSync(`${totalType}.json`).toString())
+        const { buffer } = await createSkilImage(skillData, false, changed)
         image.push(buffer)
     }
     await twitter.tweet(status, image)

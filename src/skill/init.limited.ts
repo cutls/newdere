@@ -86,6 +86,7 @@ const sparkles: ISkill['idols'] = []
 
 const alldataRaw = JSON.parse(fs.readFileSync('allCharaData.json').toString())
 async function mainLimited() {
+    if (fs.existsSync('limited.json')) return console.log('You have already limited.json.')
     console.log('wait several minutes')
     const alldata = alldataRaw.result
     for (const card of alldata) {

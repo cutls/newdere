@@ -131,8 +131,8 @@ export default async function main(createData: ISkill[], debug?: boolean, change
     }
     return { buffer: pngBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}-skill-${skillType}.png` }
 }
-//const idols = JSON.parse(fs.readFileSync('limited.json').toString())
-//main(idols, true, ['八神マキノ'])
+const idols = JSON.parse(fs.readFileSync('blane.json').toString())
+main(idols, true, [])
 function font(size: number) {
     return `${size * scale}px NotoSans`
 }
