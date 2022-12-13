@@ -28,7 +28,7 @@ export default async function main() {
         if (content?.match('＜期間限定アイドル')) tg = true
         if (content?.match('＜ブラン限定アイドル')) tg = true
         if (content?.match('＜ノワール限定アイドル')) tg = true
-        if (content?.match('新しいプラチナオーディションガシャ開催')) tg = true
+        if (content?.match('プラチナオーディションガシャ開催')) tg = true
         if (tg) break
     }
     if (!targetTweet) return console.log('no tweet')
