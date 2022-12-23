@@ -3,7 +3,7 @@
 [@nita_minami](https://twitter.com/nita_minami)
 
 ![2022-10-30-cv](/res/2022-10-30-cv.png)  
-↑2022年10月30日現在 **ボイス実装済み** | [ボイス未実装](https://github.com/cutls/newdere/blob/main/res/2022-10-30-nocv.png) | [限定スキル秒数対応表](https://github.com/cutls/newdere/blob/main/res/2022-11-04-limited.png) | [ブランスキル秒数対応表](https://github.com/cutls/newdere/blob/main/res/2022-12-04-blane.png)
+↑2022年10月30日現在 **ボイス実装済み** | [ボイス未実装](https://github.com/cutls/newdere/blob/main/res/2022-10-30-nocv.png) | [限定スキル秒数対応表(2022/11)](https://github.com/cutls/newdere/blob/main/res/2022-11-04-limited.png) | [ブランスキル秒数対応表(2022/11)](https://github.com/cutls/newdere/blob/main/res/2022-12-04-blane.png)
 
 
 
