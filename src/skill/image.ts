@@ -37,25 +37,29 @@ export default async function main(createData: ISkill[], debug?: boolean, change
         const { idols } = skill
         ctx.font = font(18)
         ctx.fillStyle = 'black'
-        ctx.fillText(skill.skillName, (base + 100) * scale, 40 * scale)
-        ctx.font = font(14)
-        ctx.fillText(`${skill.skillName === 'ミューチャル' ? '非' : ''}特化`, (base + 30) * scale, 70 * scale)
+        const textWidth = ctx.measureText(skill.skillName).width
+        ctx.fillText(skill.skillName, (base + (255 / 2) - (textWidth / 4) + 30) * scale, 40 * scale)
+        const isMutual = skill.skillName === 'ミューチャル'
+        ctx.font = isMutual ? font(12) : font(14)
+        ctx.fillText(`${isMutual ? '非' : ''}特化`, (base + 30 + (isMutual ? 2 : 5)) * scale, 70 * scale)
         ctx.fillText(`Cu`, (base + 90) * scale, 70 * scale)
         ctx.fillText(`Co`, (base + 150) * scale, 70 * scale)
         ctx.fillText(`Pa`, (base + 210) * scale, 70 * scale)
         const intList = skillIntList[skillIndex]
         let start = 75
+        ctx.font = font(11)
         for (const interval of intList) {
             ctx.fillText(`${interval}s`, (base + 5) * scale, (start + 90) * scale)
             // 横線
             ctx.strokeStyle = '#e0e0e0'
-            ctx.lineWidth = 1
+            ctx.lineWidth = 4
             const left = 5
             const right = 250
             ctx.beginPath()
             ctx.moveTo((base + left) * scale, (start) * scale)
             ctx.lineTo((base + right) * scale, (start) * scale)
             ctx.stroke()
+            ctx.lineWidth = 1
             ctx.beginPath()
             ctx.moveTo((base + left + 25) * scale, (start + 60) * scale)
             ctx.lineTo((base + right) * scale, (start + 60) * scale)
@@ -64,9 +68,9 @@ export default async function main(createData: ISkill[], debug?: boolean, change
             ctx.moveTo((base + left + 25) * scale, (start + 120) * scale)
             ctx.lineTo((base + right) * scale, (start + 120) * scale)
             ctx.stroke()
-            ctx.fillText(`Vo`, (base + left + 30) * scale, (start + 35) * scale)
-            ctx.fillText(`Da`, (base + left + 30) * scale, (start + 95) * scale)
-            ctx.fillText(`Vi`, (base + left + 30) * scale, (start + 155) * scale)
+            ctx.fillText(`Vo`, (base + left + 38) * scale, (start + 35) * scale)
+            ctx.fillText(`Da`, (base + left + 38) * scale, (start + 95) * scale)
+            ctx.fillText(`Vi`, (base + left + 40) * scale, (start + 155) * scale)
             const idolThisInt = idols.filter((i) => i.interval === interval)
             for (const idol of idolThisInt) {
                 let imgX = base + 80
@@ -85,7 +89,7 @@ export default async function main(createData: ISkill[], debug?: boolean, change
                     ctx.fill()
                     ctx.fillStyle = '#000'
                 }
-                const image = await loadImage(idol.image)
+                const image = debug ? await loadImage(idol.image) : await loadImage(idol.image)
                 ctx.drawImage(image, imgX * scale, imgY * scale, 40 * scale, 40 * scale)
                 if (!idol.since) continue
                 ctx.font = font(11)
@@ -96,29 +100,29 @@ export default async function main(createData: ISkill[], debug?: boolean, change
         }
 
         ctx.beginPath()
-        ctx.moveTo((base + 70) * scale, 70 * scale)
+        ctx.moveTo((base + 70) * scale, 60 * scale)
         ctx.lineTo((base + 70) * scale, (start - 5) * scale)
         ctx.strokeStyle = '#e0e0e0'
-        ctx.lineWidth = 1
+        ctx.lineWidth = 4
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo((base + 130) * scale, 70 * scale)
+        ctx.moveTo((base + 130) * scale, 60 * scale)
         ctx.lineTo((base + 130) * scale, (start - 5) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo((base + 190) * scale, 70 * scale)
+        ctx.moveTo((base + 190) * scale, 60 * scale)
         ctx.lineTo((base + 190) * scale, (start - 5) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
 
         ctx.beginPath()
-        ctx.moveTo((base + 30) * scale, 70 * scale)
+        ctx.moveTo((base + 30) * scale, 60 * scale)
         ctx.lineTo((base + 30) * scale, (start - 5) * scale)
         ctx.strokeStyle = '#e0e0e0'
-        ctx.lineWidth = 1
+        ctx.lineWidth = 4
         ctx.stroke()
         base = base + 255
         skillIndex++
@@ -131,7 +135,7 @@ export default async function main(createData: ISkill[], debug?: boolean, change
     }
     return { buffer: pngBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}-skill-${skillType}.png` }
 }
-//const idols = JSON.parse(fs.readFileSync('blane.json').toString())
+//const idols = JSON.parse(fs.readFileSync('limited.json').toString())
 //main(idols, true, [])
 function font(size: number) {
     return `${size * scale}px NotoSans`
