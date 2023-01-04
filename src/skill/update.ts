@@ -43,6 +43,6 @@ const main = async (changed: string[], target: 'limited' | 'blane') => {
             console.error(e)
         }
     }
-    fs.writeFileSync('limited.json', JSON.stringify(current))
+    fs.writeFileSync(`${target}.json`, JSON.stringify(current))
 }
 export default main

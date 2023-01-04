@@ -7,8 +7,8 @@ import dotenv from 'dotenv'
 dotenv.config()
 const { createCanvas, registerFont, loadImage } = canvas
 const scale = 2
-const skillType = 'limited'
-export default async function main(createData: ISkill[], debug?: boolean, changed?: string[]) {
+export default async function main(createData: ISkill[], debug?: boolean, changed?: string[], skillTyped?: 'limited' | 'blane') {
+    const skillType = skillTyped || 'limited'
     const masterData = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
     const commonImage = await loadImage(`https://hidamarirhodonite.kirara.ca/icon_card/100708.png`)
     let height = 0
@@ -135,8 +135,8 @@ export default async function main(createData: ISkill[], debug?: boolean, change
     }
     return { buffer: pngBuffer, url: `${process.env.STORAGE}${moment().format(`YYYY-MM-DD`)}-skill-${skillType}.png` }
 }
-const idols = JSON.parse(fs.readFileSync('blane.json').toString())
-main(idols, true, [])
+//const idols = JSON.parse(fs.readFileSync('limited.json').toString())
+//main(idols, true, [])
 function font(size: number) {
     return `${size * scale}px NotoSans`
 }

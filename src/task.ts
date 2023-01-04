@@ -57,7 +57,7 @@ export default async function main() {
     if(totalType === 'limited' || totalType === 'blane') {
         await updateSkillData(changed, totalType)
         const skillData = JSON.parse(fs.readFileSync(`${totalType}.json`).toString())
-        const { buffer } = await createSkilImage(skillData, false, changed)
+        const { buffer } = await createSkilImage(skillData, false, changed, totalType)
         image.push(buffer)
     }
     await twitter.tweet(status, image)
