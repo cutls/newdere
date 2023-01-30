@@ -1,11 +1,13 @@
 import axios from 'axios'
-import fs from 'fs'
+import * as fs from 'fs'
 import moment from 'moment'
 import { ISkill } from '../../types'
-const targetSkills = ['Cute Ensemble', 'Cool Ensemble', 'Passion Ensemble', 'Mutual', 'Alternate', 'Life Sparkle']
+const targetSkillsForLimited = ['Cute Ensemble', 'Cool Ensemble', 'Passion Ensemble', 'Mutual', 'Alternate', 'Life Sparkle']
+const targetSkillsForBlane = ['Vocal Motif', 'Dance Motif', 'Visual Motif', 'Tricolor Symphony', 'Tricolor Synergy', 'Refrain']
 const props: ('Vo' | 'Vi' | 'Da')[] = ['Vo', 'Da', 'Vi']
 
 const main = async (changed: string[], target: 'limited' | 'blane') => {
+    const targetSkills = target === 'limited' ? targetSkillsForLimited : targetSkillsForBlane
     const idols = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
     const current: ISkill[] = JSON.parse(fs.readFileSync(`${target}.json`).toString())
     for (const changeName of changed) {
@@ -14,7 +16,6 @@ const main = async (changed: string[], target: 'limited' | 'blane') => {
             const data = await axios.get(`https://starlight.kirara.ca/api/v1/card_t/${id}`)
             const { result } = data.data
             const cardDet = result[0]
-            console.log(cardDet)
             const skill = cardDet.skill
             const apiType = cardDet.attribute
             const foundIndex = targetSkills.findIndex((item) => item === skill.skill_type)

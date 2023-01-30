@@ -6,7 +6,7 @@ import create from './create'
 
 export default async function main() {
   try {
-    const cv = true // ボイス実装済みが欲しい場合true
+    const cv = false // ボイス実装済みが欲しい場合true
     const tweet = false // tweetがtrueならGCSにアップロードされます。falseならルートディレクトリにimage.pngが作成されます。
     const idols = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
     const sheetData = await sheet(cv)
