@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as fs from 'fs'
 import moment from 'moment'
 import { ISkill } from '../../types'
-const targetSkillsForLimited = ['Cute Ensemble', 'Cool Ensemble', 'Passion Ensemble', 'Mutual', 'Alternate', 'Life Sparkle']
+const targetSkillsForLimited = ['Cute Ensemble', 'Cool Ensemble', 'Passion Ensemble', 'Mutual', 'Alternate', 'Life Sparkle', 'Overdrive']
 const targetSkillsForBlane = ['Vocal Motif', 'Dance Motif', 'Visual Motif', 'Tricolor Symphony', 'Tricolor Synergy', 'Refrain']
 const props: ('Vo' | 'Vi' | 'Da')[] = ['Vo', 'Da', 'Vi']
 
@@ -18,7 +18,8 @@ const main = async (changed: string[], target: 'limited' | 'blane') => {
             const cardDet = result[0]
             const skill = cardDet.skill
             const apiType = cardDet.attribute
-            const foundIndex = targetSkills.findIndex((item) => item === skill.skill_type)
+            let foundIndex = targetSkills.findIndex((item) => item === skill.skill_type)
+            if (skill.skill_name === 'もりくぼのとっておき') foundIndex = 6 // overdrive
             if (foundIndex === -1) continue
             let type: 'Cu' | 'Co' | 'Pa' | null = null
             if (apiType === 'cute') type = 'Cu'
@@ -40,6 +41,7 @@ const main = async (changed: string[], target: 'limited' | 'blane') => {
             if (foundIndex === 3) current[1].idols.push(willPush)
             if (foundIndex === 4) current[2].idols.push(willPush)
             if (foundIndex === 5) current[3].idols.push(willPush)
+            if (foundIndex === 6) current[4].idols.push(willPush)
         } catch (e) {
             console.error(e)
         }

@@ -129,7 +129,7 @@ export default async function main(createData: ISkill[], debug?: boolean, change
     }
     const pngBuffer = image.toBuffer('image/png')
     if (debug) {
-        fs.writeFileSync('image.png', pngBuffer)
+        fs.writeFileSync('image-skill.png', pngBuffer)
     } else {
         await upload(`${moment().format(`YYYY-MM-DD`)}-skill-${skillType}.png`, pngBuffer)
     }

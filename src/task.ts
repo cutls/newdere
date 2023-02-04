@@ -48,18 +48,18 @@ export default async function main() {
         if (type === 'normal') n = n + 1
         if (counts) notation.push(`[${typeJa}] ${idolName} ${days}日経過(恒常${n}, 限定${l}, フェス${f})`)
     }
-    if (!toot) return false
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
-    const { buffer, url } = await create(result, false, !cv)
+    const { buffer, url } = await create(result, !toot, !cv)
     const image = [buffer]
     const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
     if(totalType === 'limited' || totalType === 'blane') {
         await updateSkillData(changed, totalType)
         const skillData = JSON.parse(fs.readFileSync(`${totalType}.json`).toString())
-        const { buffer } = await createSkilImage(skillData, false, changed, totalType)
+        const { buffer } = await createSkilImage(skillData, !toot, changed, totalType)
         image.push(buffer)
     }
+    if (!toot) return false
     await twitter.tweet(status, image)
 }
 main()
