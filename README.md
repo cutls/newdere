@@ -3,7 +3,7 @@
 [@nita_minami](https://twitter.com/nita_minami)
 
 ![2023-02-04-cv](/res/2023-02-04-cv.png)  
-↑2023年2月4日現在 **ボイス実装済み** | [ボイス未実装](https://github.com/cutls/newdere/blob/main/res/2023-02-04-nocv.png) | [限定スキル秒数対応表(2023/2)](https://github.com/cutls/newdere/blob/main/res/2023-02-04-limited.png) | [ブランスキル秒数対応表(2023/1/30)](https://github.com/cutls/newdere/blob/main/res/2023-01-30-blane.png)
+↑2023年2月4日現在 **ボイス実装済み** | [ボイス未実装(2023/2/15)](https://github.com/cutls/newdere/blob/main/res/2023-02-15-nocv.png) | [限定スキル秒数対応表(2023/2)](https://github.com/cutls/newdere/blob/main/res/2023-02-04-limited.png) | [ブランスキル秒数対応表(2023/1/30)](https://github.com/cutls/newdere/blob/main/res/2023-01-30-blane.png)
 
 スキル対応表が必要ない恒常やノワールでは寂しいので新規カードの画像を投稿します。
 
