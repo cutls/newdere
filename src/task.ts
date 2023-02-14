@@ -11,6 +11,7 @@ import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
 import { IType } from '../types'
 import axios from 'axios'
 import moment from 'moment'
+import charaImage from './chara/charaImage'
 const br = `
 `
 
@@ -73,6 +74,11 @@ export default async function main() {
         const skillData = JSON.parse(fs.readFileSync(`${totalType}.json`).toString())
         const { buffer } = await createSkilImage(skillData, !toot, changed, totalType)
         image.push(buffer)
+    } else {
+        for (const iId of changed) {
+            const buffer = await charaImage(iId)
+            image.push(buffer)
+        }
     }
     if (!toot) return false
     await twitter.tweet(status, image)
