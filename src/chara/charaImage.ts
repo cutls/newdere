@@ -36,7 +36,7 @@ export default async function main(charaId: string, debug?: boolean) {
     const maxInd = isMutual ? vdv.indexOf(Math.min(...vdv)) : vdv.indexOf(Math.max(...vdv))
     const maxStatus = vdn[maxInd]
     ctx.fillStyle = 'black'
-    ctx.fillText(maxStatus, 590 * scale, 884 * scale)
+    ctx.fillText(maxStatus, 590 * scale, 890 * scale)
     ctx.font = font(30)
     ctx.fillText(idol.lead_skill.name, 720 * scale, 864 * scale)
     if (skill.skill_type.match('<missing string: ')) {
@@ -69,7 +69,7 @@ export default async function main(charaId: string, debug?: boolean) {
     }
     return pngBuffer
 }
-main('100798', true)
+main('301122', true)
 function getColor(type: 'cool' | 'cute' | 'passion') {
     if (type === 'cool') return '#2b6acf'
     if (type === 'cute') return '#cf2ba1'
