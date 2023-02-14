@@ -61,6 +61,8 @@ export default async function main() {
         const startNotation = moment(new Date(gacha[0].start_date * 1000)).format('YYYY/MM/DD')
         const endNotation = moment(new Date(gacha[0].end_date * 1000)).format('YYYY/MM/DD')
         happeningObj.name = gacha[0].name
+        if (totalType === 'noir') happeningObj.name = 'フェス(ノワール)'
+        if (totalType === 'blane') happeningObj.name = 'フェス(ブラン)'
         happeningObj.duration = `${startNotation}〜${endNotation}`
     }
     
