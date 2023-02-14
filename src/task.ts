@@ -9,6 +9,8 @@ import fs from 'fs'
 import { getTl } from './twitter'
 import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
 import { IType } from '../types'
+import axios from 'axios'
+import moment from 'moment'
 const br = `
 `
 
@@ -48,9 +50,22 @@ export default async function main() {
         if (type === 'normal') n = n + 1
         if (counts) notation.push(`[${typeJa}] ${idolName} ${days}日経過(恒常${n}, 限定${l}, フェス${f})`)
     }
+    const happeningObj = {
+        name: '',
+        duration: ''
+    }
+    const happeningNow = await axios.get('https://starlight.kirara.ca/api/v1/happening/now')
+    const gacha = happeningNow.data.gachas
+    if (gacha && gacha.length) {
+        const startNotation = moment(new Date(gacha[0].start_date * 1000)).format('YYYY/MM/DD')
+        const endNotation = moment(new Date(gacha[0].end_date * 1000)).format('YYYY/MM/DD')
+        happeningObj.name = gacha[0].name
+        happeningObj.duration = `${startNotation}〜${endNotation}`
+    }
+    
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
-    const { buffer, url } = await create(result, !toot, !cv)
+    const { buffer, url } = await create(result, happeningObj, !toot, !cv)
     const image = [buffer]
     const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
     if(totalType === 'limited' || totalType === 'blane') {

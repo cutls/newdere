@@ -8,17 +8,20 @@ dotenv.config()
 const { createCanvas, registerFont, loadImage } = canvas
 const scale = 2
 type ICreateData = { [key: number]: IChara[] }
+type IHappingNow = { name: string, duration: string }
 
-export default async function main(createData: ICreateData, debug?: boolean, noCv?: boolean) {
+export default async function main(createData: ICreateData, happeningObj: IHappingNow, debug?: boolean, noCv?: boolean) {
+    const { name: gachaName, duration: gachaDuration } = happeningObj
+    const commonImage = await loadImage(`https://hidamarirhodonite.kirara.ca/icon_card/100708.png`)
     const useList = noCv ? ['3+', '2Cu', '2Co', '2Pa', '1Cu', '1Co', '1Pa'] : ['7', '6', '5', '4', '3', '2']
     let height = 0
     for (const chances of useList) {
         const idols = retIdols(createData, chances) || []
-        const thisHeight = idols.length * 50 + 75
+        const thisHeight = idols.length * 50 + 155
         if (thisHeight > height) height = thisHeight
     }
     registerFont('./noto.otf', { family: 'NotoSans' })
-    const image = createCanvas((340 * useList.length + 100) * scale, height * scale)
+    const image = createCanvas((340 * useList.length + 80) * scale, height * scale)
 
     const ctx = image.getContext('2d')
     ctx.beginPath()
@@ -27,15 +30,19 @@ export default async function main(createData: ICreateData, debug?: boolean, noC
     let base = 10
     for (const chanceStr of useList) {
         const idols: IChara[] = retIdols(createData, chanceStr) || []
-        ctx.font = font(18)
         ctx.fillStyle = 'black'
-        ctx.fillText(`SSR ${getHeaderTitle(chanceStr)}`, (base + 50) * scale, 50 * scale)
+        ctx.font = font(35)
+        ctx.fillText(gachaName, 10 * scale, 55 * scale)
+        ctx.font = font(25)
+        ctx.fillText(gachaDuration, 10 * scale, 95 * scale)
+        ctx.font = font(18)
+        ctx.fillText(`SSR ${getHeaderTitle(chanceStr)}`, (base + 50) * scale, 130 * scale)
         ctx.font = font(14)
-        ctx.fillText(`内訳`, (base + 175) * scale, 50 * scale)
-        ctx.fillText(`更新日`, (base + 222) * scale, 50 * scale)
-        ctx.fillText(`経過`, (base + 295) * scale, 35 * scale)
-        ctx.fillText(`日数`, (base + 295) * scale, 50 * scale)
-        let start = 75
+        ctx.fillText(`内訳`, (base + 175) * scale, 130 * scale)
+        ctx.fillText(`更新日`, (base + 222) * scale, 130 * scale)
+        ctx.fillText(`経過`, (base + 295) * scale, 115 * scale)
+        ctx.fillText(`日数`, (base + 295) * scale, 130 * scale)
+        let start = 155
         for (const idol of idols) {
             if (idol.days >= 300) {
                 ctx.beginPath()
@@ -52,7 +59,7 @@ export default async function main(createData: ICreateData, debug?: boolean, noC
                 ctx.fill()
             }
             if (!idol.image) console.log(`No image of ${idol.name}`)
-            const image = await loadImage(idol.image)
+            const image = debug ? commonImage : await loadImage(idol.image)
             ctx.drawImage(image, (base + 10) * scale, (start - 10) * scale, 40 * scale, 40 * scale)
             ctx.font = font(16)
             if (idol.name.length > 7) ctx.font = font(11)
@@ -85,26 +92,26 @@ export default async function main(createData: ICreateData, debug?: boolean, noC
         }
 
         ctx.beginPath()
-        ctx.moveTo((base + 168) * scale, 30 * scale)
+        ctx.moveTo((base + 168) * scale, 110 * scale)
         ctx.lineTo((base + 168) * scale, (start - 15) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo((base + 285) * scale, 30 * scale)
+        ctx.moveTo((base + 285) * scale, 110 * scale)
         ctx.lineTo((base + 285) * scale, (start - 15) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
         ctx.beginPath()
-        ctx.moveTo((base + 220) * scale, 30 * scale)
+        ctx.moveTo((base + 220) * scale, 110 * scale)
         ctx.lineTo((base + 220) * scale, (start - 15) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
         ctx.stroke()
 
         ctx.beginPath()
-        ctx.moveTo((base + 340) * scale, 30 * scale)
+        ctx.moveTo((base + 340) * scale, 110 * scale)
         ctx.lineTo((base + 340) * scale, (height - 10) * scale)
         ctx.strokeStyle = '#e0e0e0'
         ctx.lineWidth = 1
@@ -148,7 +155,7 @@ function getHeaderTitle(chanceStr: string) {
         return `3種以上`
     } else if (chanceStr.match(/([12])(Cu|Co|Pa)/)) {
         const m = chanceStr.match(/([12])(Cu|Co|Pa)/)
-        if (!m) return  `${chanceStr}種`
+        if (!m) return `${chanceStr}種`
         return `${m[1]}種(${m[2]})`
     }
 }
