@@ -17,7 +17,7 @@ export default async function main() {
         name: '',
         duration: ''
     }
-    const happeningNow = await axios.get('https://starlight.kirara.ca/api/v1/happening/1676209571')
+    const happeningNow = await axios.get('https://starlight.kirara.ca/api/v1/happening/now')
     const gacha = happeningNow.data.gachas
     if (gacha && gacha.length) {
         const startNotation = moment(new Date(gacha[0].start_date * 1000)).format('YYYY/MM/DD')

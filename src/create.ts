@@ -59,7 +59,7 @@ export default async function main(createData: ICreateData, happeningObj: IHappi
                 ctx.fill()
             }
             if (!idol.image) console.log(`No image of ${idol.name}`)
-            const image = debug ? commonImage : await loadImage(idol.image)
+            const image = await loadImage(idol.image)
             ctx.drawImage(image, (base + 10) * scale, (start - 10) * scale, 40 * scale, 40 * scale)
             ctx.font = font(16)
             if (idol.name.length > 7) ctx.font = font(11)
