@@ -19,7 +19,7 @@ const main = async (changed: string[], target: 'limited' | 'blane') => {
             const skill = cardDet.skill
             const apiType = cardDet.attribute
             let foundIndex = targetSkills.findIndex((item) => item === skill.skill_type)
-            if (skill.skill_name === 'もりくぼのとっておき') foundIndex = 6 // overdrive
+            if (skill.skill_type.match('<missing string: ')) foundIndex = 6 // overdrive
             if (foundIndex === -1) continue
             let type: 'Cu' | 'Co' | 'Pa' | null = null
             if (apiType === 'cute') type = 'Cu'
