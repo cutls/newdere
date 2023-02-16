@@ -78,11 +78,13 @@ export default async function main() {
         image.push(buffer)
     } else {
         for (const iId of changed) {
-            const buffer = await charaImage(iId)
+            const idols = JSON.parse(fs.readFileSync('allCharaIdData.json').toString())
+            const buffer = await charaImage(idols[iId])
             image.push(buffer)
         }
     }
     if (!toot) return false
+    console.log('tweeting')
     await twitter.tweet(status, image)
 }
 main()
