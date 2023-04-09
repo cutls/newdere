@@ -6,12 +6,11 @@ import updateSkillData from './skill/update'
 import createSkilImage from './skill/image'
 import * as twitter from './twitter'
 import fs from 'fs'
-import { getTl } from './twitter'
-import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
-import { IType } from '../types'
+import { ITweet, IType } from '../types'
 import axios from 'axios'
 import moment from 'moment'
 import charaImage from './chara/charaImage'
+import { getTl } from './scraping'
 const br = `
 `
 
@@ -23,7 +22,7 @@ export default async function main() {
     let cv = false
     const notation = []
     const timeline = await getTl()
-    let targetTweet: TweetV1 | null = null
+    let targetTweet: ITweet | null = null
     for (const t of timeline) {
         let tg = false
         targetTweet = t
