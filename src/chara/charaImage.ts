@@ -75,7 +75,7 @@ export default async function main(charaId: string, debug?: boolean) {
     }
     return pngBuffer
 }
-//main('100928', true)
+main('101214', true)
 function getColor(type: 'cool' | 'cute' | 'passion') {
     if (type === 'cool') return '#2b6acf'
     if (type === 'cute') return '#cf2ba1'
