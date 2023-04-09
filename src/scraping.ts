@@ -26,7 +26,6 @@ export async function getTl() {
         })
     }
     if (!isDev) await browser.close()
-    writeFileSync('elon.json', JSON.stringify(get))
     return get
 }
 getTl()
