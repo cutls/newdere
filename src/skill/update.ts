@@ -47,5 +47,6 @@ const main = async (changed: string[], target: 'limited' | 'blane') => {
         }
     }
     fs.writeFileSync(`${target}.json`, JSON.stringify(current))
+    return current
 }
 export default main
