@@ -18,7 +18,7 @@ const br = `
 export default async function main() {
     const { changed, idols } = await getImageIdData()
     if (!changed.length) return
-    let toot = true
+    const toot = true
     let typeJa = '恒常'
     let cv = false
     const notation = []
