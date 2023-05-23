@@ -29,3 +29,4 @@ export async function getTl() {
     if(isDev) console.log(get)
     return get
 }
+getTl()
