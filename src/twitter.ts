@@ -1,24 +1,24 @@
-import twitter from 'twitter'
+import { TwitterApi } from 'twitter-api-v2'
 import dotenv from 'dotenv'
-import { SendTweetV1Params, TweetV1UserTimelineParams } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
-import { ITweet } from '../types'
+import fs from 'fs'
 dotenv.config()
 
-const twit = new twitter({
-    consumer_key: process.env.TW_CONSUMER_KEY || '',
-    consumer_secret: process.env.TW_CONSUMER_SECRET || '',
-    access_token_key: process.env.TW_ACCESS_TOKEN || '',
-    access_token_secret: process.env.TW_ACCESS_TOKEN_SECRET || '',
+const twitterClient = new TwitterApi({
+    appKey: process.env.TW_CONSUMER_KEY,
+    appSecret: process.env.TW_CONSUMER_SECRET,
+    accessToken: process.env.TW_ACCESS_TOKEN,
+    accessSecret: process.env.TW_ACCESS_TOKEN_SECRET
 })
+
 export async function tweet(text: string, media: Buffer[]) {
     try {
-        const mediaIds = []
+        const mediaIds: string[] = []
         for (const medium of media) {
-            const mediaId = await twit.post('media/upload', { media: medium })
-            mediaIds.push(mediaId.media_id_string)
+            const mediaId = await twitterClient.v1.uploadMedia(medium, { type: 'png' })
+            mediaIds.push(mediaId)
         }
-        const param: SendTweetV1Params = { status: text, media_ids: mediaIds.join(',') }
-        await twit.post('/statuses/update.json', param)
+        const param = { media_ids: mediaIds }
+        await twitterClient.v2.tweet(text, { media: param })
     } catch (e) {
         console.error(e)
     }
