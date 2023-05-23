@@ -16,6 +16,7 @@ const br = `
 
 export default async function main() {
     const { changed, idols } = await getImageIdData()
+    console.log('new data', changed)
     if (!changed.length) return
     let toot = true
     let typeJa = '恒常'
@@ -34,6 +35,7 @@ export default async function main() {
         if (tg) break
     }
     if (!targetTweet) return console.log('no tweet')
+    console.log('new data tweeting', changed)
     const { id_str } = targetTweet
     const tweetUrl = `https://twitter.com/imascg_stage/status/${id_str}`
     let totalType: IType = 'normal'
