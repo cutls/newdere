@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs'
 import { ITweet } from '../types'
 import puppeteer from 'puppeteer'
-const isDev = false
+const isDev = true
 
 export async function getTl() {
     const browser = await puppeteer.launch({ headless: !isDev })
@@ -26,6 +26,6 @@ export async function getTl() {
         })
     }
     if (!isDev) await browser.close()
+    if(isDev) console.log(get)
     return get
 }
-getTl()
