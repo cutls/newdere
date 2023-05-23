@@ -26,7 +26,7 @@ export async function getTl() {
         })
     }
     if (!isDev) await browser.close()
-    if(isDev) console.log(get)
+    if(!isDev) console.log(get)
     return get
 }
 getTl()
