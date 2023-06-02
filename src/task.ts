@@ -13,7 +13,7 @@ import charaImage from './chara/charaImage'
 import { getTl } from './scraping'
 const br = `
 `
-
+const debug = false
 export default async function main() {
     const { changed, idols } = await getImageIdData()
     console.log('new data', changed)
@@ -22,7 +22,7 @@ export default async function main() {
     let typeJa = '恒常'
     let cv = false
     const notation = []
-    const timeline = await getTl()
+    const timeline = await getTl(debug)
     let targetTweet: ITweet | null = null
     for (const t of timeline) {
         let tg = false
@@ -69,13 +69,14 @@ export default async function main() {
     
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
-    const { buffer, url } = await create(result, happeningObj, !toot, !cv)
+    const { buffer, url } = await create(result, happeningObj, debug, !cv)
     const image = [buffer]
     const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
     if(totalType === 'limited' || totalType === 'blane') {
         await updateSkillData(changed, totalType)
         const skillData = JSON.parse(fs.readFileSync(`${totalType}.json`).toString())
-        const { buffer } = await createSkilImage(skillData, !toot, changed, totalType)
+        console.log('createSkilImage', skillData, debug, changed, totalType)
+        const { buffer } = await createSkilImage(skillData, debug, changed, totalType)
         image.push(buffer)
     } else {
         for (const iId of changed) {
@@ -85,7 +86,7 @@ export default async function main() {
         }
     }
     if (!toot) return false
-    console.log('tweeting')
-    await twitter.tweet(status, image)
+    console.log('tweeting', status)
+    if (!debug) await twitter.tweet(status, image)
 }
 main()
