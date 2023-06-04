@@ -6,24 +6,24 @@ import updateSkillData from './skill/update'
 import createSkilImage from './skill/image'
 import * as twitter from './twitter'
 import fs from 'fs'
-import { getTl } from './twitter'
-import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
-import { IType } from '../types'
+import { ITweet, IType } from '../types'
 import axios from 'axios'
 import moment from 'moment'
 import charaImage from './chara/charaImage'
+import { getTl } from './scraping'
 const br = `
 `
-
+const debug = false
 export default async function main() {
     const { changed, idols } = await getImageIdData()
+    console.log('new data', changed)
     if (!changed.length) return
     const toot = true
     let typeJa = '恒常'
     let cv = false
     const notation = []
-    const timeline = await getTl()
-    let targetTweet: TweetV1 | null = null
+    const timeline = await getTl(debug)
+    let targetTweet: ITweet | null = null
     for (const t of timeline) {
         let tg = false
         targetTweet = t
@@ -35,6 +35,7 @@ export default async function main() {
         if (tg) break
     }
     if (!targetTweet) return console.log('no tweet')
+    console.log('new data tweeting', changed)
     const { id_str } = targetTweet
     const tweetUrl = `https://twitter.com/imascg_stage/status/${id_str}`
     let totalType: IType = 'normal'
@@ -68,12 +69,14 @@ export default async function main() {
     
     const sheetData = await sheet(cv)
     const result = await calc(sheetData, idols)
-    const { buffer, url } = await create(result, happeningObj, !toot, !cv)
+    const { buffer, url } = await create(result, happeningObj, debug, !cv)
     const image = [buffer]
     const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
     if(totalType === 'limited' || totalType === 'blane') {
-        const skillData = await updateSkillData(changed, totalType)
-        const { buffer } = await createSkilImage(skillData, !toot, changed, totalType)
+        await updateSkillData(changed, totalType)
+        const skillData = JSON.parse(fs.readFileSync(`${totalType}.json`).toString())
+        console.log('createSkilImage', skillData, debug, changed, totalType)
+        const { buffer } = await createSkilImage(skillData, debug, changed, totalType)
         image.push(buffer)
     } else {
         for (const iId of changed) {
@@ -83,7 +86,7 @@ export default async function main() {
         }
     }
     if (!toot) return false
-    console.log('tweeting')
-    await twitter.tweet(status, image)
+    console.log('tweeting', status)
+    if (!debug) await twitter.tweet(status, image)
 }
 main()

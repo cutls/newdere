@@ -18,3 +18,7 @@ export interface ISkill {
     }[]
 }
 export type IType = 'limited' | 'noir' | 'blane' | 'normal'
+export interface ITweet {
+    id_str: string
+    text: string
+}

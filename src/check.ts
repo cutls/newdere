@@ -1,14 +1,13 @@
 import moment from 'moment'
 import { GoogleSpreadsheet } from 'google-spreadsheet'
-import { TweetV1 } from 'twitter-api-v2/dist/types/v1/tweet.v1.types'
 import dotenv from 'dotenv'
-import { IType } from '../types'
+import { ITweet, IType } from '../types'
 dotenv.config()
 const sheetId = process.env.SHEET_ID || ''
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || ''
 const privateKey = process.env.GOOGLE_PRIVATE_KEY || ''
 
-function checkNew(item: TweetV1) {
+function checkNew(item: ITweet) {
     const content = item.text
     if (content?.match('＜期間限定アイドル')) return 'limited'
     if (content?.match('＜ブラン限定アイドル')) return 'blane'
@@ -23,7 +22,7 @@ interface ICheck {
     type?: IType
     hasCv: boolean
 }
-export default async function main(idolName: string, targetTweet: TweetV1): Promise<ICheck> {
+export default async function main(idolName: string, targetTweet: ITweet): Promise<ICheck> {
     const type = checkNew(targetTweet)
     const doc = new GoogleSpreadsheet(sheetId)
     doc.useServiceAccountAuth({
