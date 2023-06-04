@@ -27,7 +27,7 @@ const main = async (changed: string[], target: 'limited' | 'blane') => {
             if (apiType === 'passion') type = 'Pa'
             if (!type) continue
             const vdv = [cardDet.vocal_max, cardDet.dance_max, cardDet.visual_max]
-            const maxInd = (target === 'limited' && foundIndex === 3) ? vdv.indexOf(Math.min(...vdv)) : vdv.indexOf(Math.max(...vdv))
+            const maxInd = foundIndex === 3 ? vdv.indexOf(Math.min(...vdv)) : vdv.indexOf(Math.max(...vdv))
             const property = props[maxInd]
             const willPush = {
                 type: type,
@@ -37,7 +37,6 @@ const main = async (changed: string[], target: 'limited' | 'blane') => {
                 image: `https://hidamarirhodonite.kirara.ca/icon_card/${cardDet.id}.png`,
                 since: moment().format('YYYY/MM/DD')
             }
-            console.log(willPush)
             if (foundIndex <= 2) current[0].idols.push(willPush)
             if (foundIndex === 3) current[1].idols.push(willPush)
             if (foundIndex === 4) current[2].idols.push(willPush)
