@@ -10,7 +10,6 @@ import { ITweet, IType } from '../types'
 import axios from 'axios'
 import moment from 'moment'
 import charaImage from './chara/charaImage'
-import { getTl } from './scraping'
 const br = `
 `
 const debug = false
@@ -22,25 +21,11 @@ export default async function main() {
     let typeJa = '恒常'
     let cv = false
     const notation = []
-    const timeline = await getTl(debug)
-    let targetTweet: ITweet | null = null
-    for (const t of timeline) {
-        let tg = false
-        targetTweet = t
-        const content = t.text
-        if (content?.match('＜期間限定アイドル')) tg = true
-        if (content?.match('＜ブラン限定アイドル')) tg = true
-        if (content?.match('＜ノワール限定アイドル')) tg = true
-        if (content?.match('プラチナオーディションガシャ開催')) tg = true
-        if (tg) break
-    }
-    if (!targetTweet) return console.log('no tweet')
+    if (!changed.length) return console.log('no data to tweet')
     console.log('new data tweeting', changed)
-    const { id_str } = targetTweet
-    const tweetUrl = `https://twitter.com/imascg_stage/status/${id_str}`
     let totalType: IType = 'normal'
     for (const idolName of changed) {
-        const { hasCv, counts, days, type } = await check(idolName, targetTweet)
+        const { hasCv, counts, days, type } = await check(idolName)
         if(type) totalType = type
         if (hasCv) cv = true
         if (type === 'limited') typeJa = '限定'
@@ -71,7 +56,7 @@ export default async function main() {
     const result = await calc(sheetData, idols)
     const { buffer, url } = await create(result, happeningObj, debug, !cv)
     const image = [buffer]
-    const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ ${tweetUrl}`
+    const status = `デレステガシャ更新${br}${br}${notation.join(br)}${br}${br}高画質版: ${url} #デレステ`
     if(totalType === 'limited' || totalType === 'blane') {
         await updateSkillData(changed, totalType)
         const skillData = JSON.parse(fs.readFileSync(`${totalType}.json`).toString())

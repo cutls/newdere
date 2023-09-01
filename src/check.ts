@@ -7,11 +7,11 @@ const sheetId = process.env.SHEET_ID || ''
 const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || ''
 const privateKey = process.env.GOOGLE_PRIVATE_KEY || ''
 
-function checkNew(item: ITweet) {
-    const content = item.text
-    if (content?.match('＜期間限定アイドル')) return 'limited'
-    if (content?.match('＜ブラン限定アイドル')) return 'blane'
-    if (content?.match('＜ノワール限定アイドル')) return 'noir'
+function checkNew(): IType {
+    const day = moment().date()
+    if (day >= 27) return 'blane'
+    if (day === 16 || day === 17) return 'noir'
+    if (day < 10) return 'limited'
     return 'normal'
 }
 
@@ -22,8 +22,8 @@ interface ICheck {
     type?: IType
     hasCv: boolean
 }
-export default async function main(idolName: string, targetTweet: ITweet): Promise<ICheck> {
-    const type = checkNew(targetTweet)
+export default async function main(idolName: string): Promise<ICheck> {
+    const type = checkNew()
     const doc = new GoogleSpreadsheet(sheetId)
     doc.useServiceAccountAuth({
         client_email: clientEmail,
